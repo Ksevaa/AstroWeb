@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Настройки | Астрологический календарь</title>
+  <!-- Стили -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+  <!-- Анимация звёзд -->
+  <div class="stars"></div>
+  <div class="stars small"></div>
+
+  <!-- Основной контейнер -->
+  <div class="container">
+    <header class="header">
+      <h1 class="main-title">Настройки пользователя</h1>
+      <p class="welcome-message">Здесь вы можете изменить свои данные</p>
+    </header>
+
+    <main class="main-content">
+      <form id="settingsForm" method="POST" action="{{ url_for('settings') }}">
+
+        <!-- Имя и пол -->
+        <div class="form-row">
+          <div class="form-group half-width">
+              <label class="form-label" for="name">Имя</label>
+              <input type="text" class="form-input" id="name" name="name" value="{{ user.name }}" required>
+          </div>
+
+          <div class="form-group half-width">
+              <label class="form-label" for="gender">Пол</label>
+                 <select id="gender" name="gender" class="form-input" required>
+                    <option value="">Выберите</option>
+                    <option value="male" {% if user.gender == 'male' %}selected{% endif %}>Мужской</option>
+                    <option value="female" {% if user.gender == 'female' %}selected{% endif %}>Женский</option>
+                  </select>
+          </div>
+        </div>
+
+        <!-- Дата и время рождения -->
+        <div class="form-row">
+          <div class="form-group half-width">
+            <label class="form-label" for="birthDate">Дата рождения</label>
+            <input type="date" class="form-input" id="birthDate" name="birth_date" value="{{ user.birth_date }}" required>
+          </div>
+
+          <div class="form-group half-width">
+            <label class="form-label" for="birthTime">Время рождения</label>
+            <input type="time" class="form-input" id="birthTime" name="birth_time" value="{{ user.birth_time or '' }}" {% if not user.birth_time %}disabled{% endif %}>
+            
+            <div class="time-unknown">
+              <input type="checkbox" id="unknownTime" name="unknownTime" {% if not user.birth_time %}checked{% endif %}>
+              <label for="unknownTime">Не знаю время</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Регион и город -->
+        <div class="form-row">
+          <div class="form-group half-width">
+            <label class="form-label" for="region">Регион</label>
+            <select id="region" name="region" class="form-input" required>
+              <option value="{{ region }}" selected>{{ region }}</option>
+              <option value="">Выберите регион</option>
+                        <option value="Пермский край">Пермский край</option>
+                        <option value="Московская область">Московская область</option>
+                        <option value="Ленинградская область">Ленинградская область</option>
+                        <option value="Алтайский край">Алтайский край</option>
+                        <option value="Амурская область">Амурская область</option>
+                        <option value="Архангельская область">Архангельская область</option>
+                        <option value="Астраханская область">Астраханская область</option>
+                        <option value="Белгородская область">Белгородская область</option>
+                        <option value="Брянская область">Брянская область</option>
+                        <option value="Владимирская область">Владимирская область</option>
+                        <option value="Волгоградская область">Волгоградская область</option>
+                        <option value="Вологодская область">Вологодская область</option>
+                        <option value="Воронежская область">Воронежская область</option>
+                        <option value="Еврейская автономная область">Еврейская автономная область</option>
+                        <option value="Забайкальский край">Забайкальский край</option>
+                        <option value="Ивановская область">Ивановская область</option>
+                        <option value="Иркутская область">Иркутская область</option>
+                        <option value="Кабардино-Балкарская Республика">Кабардино-Балкарская Республика</option>
+                        <option value="Калининградская область">Калининградская область</option>
+                        <option value="Калужская область">Калужская область</option>
+                        <option value="Камчатский край">Камчатский край</option>
+                        <option value="Карачаево-Черкесская Республика">Карачаево-Черкесская Республика</option>
+                        <option value="Кемеровская область">Кемеровская область</option>
+                        <option value="Кировская область">Кировская область</option>
+                        <option value="Костромская область">Костромская область</option>
+                        <option value="Краснодарский край">Краснодарский край</option>
+                        <option value="Красноярский край">Красноярский край</option>
+                        <option value="Курганская область">Курганская область</option>
+                        <option value="Курская область">Курская область</option>
+                        <option value="Липецкая область">Липецкая область</option>
+                        <option value="Магаданская область">Магаданская область</option>
+                        <option value="Мурманская область">Мурманская область</option>
+                        <option value="Ненецкий автономный округ">Ненецкий автономный округ</option>
+                        <option value="Нижегородская область">Нижегородская область</option>
+                        <option value="Новгородская область">Новгородская область</option>
+                        <option value="Новосибирская область">Новосибирская область</option>
+                        <option value="Омская область">Омская область</option>
+                        <option value="Оренбургская область">Оренбургская область</option>
+                        <option value="Орловская область">Орловская область</option>
+                        <option value="Пензенская область">Пензенская область</option>
+                        <option value="Приморский край">Приморский край</option>
+                        <option value="Псковская область">Псковская область</option>
+                        <option value="Республика Адыгея">Республика Адыгея</option>
+                        <option value="Республика Алтай">Республика Алтай</option>
+                        <option value="Республика Башкортостан">Республика Башкортостан</option>
+                        <option value="Республика Бурятия">Республика Бурятия</option>
+                        <option value="Республика Дагестан">Республика Дагестан</option>
+                        <option value="Республика Ингушетия">Республика Ингушетия</option>
+                        <option value="Республика Калмыкия">Республика Калмыкия</option>
+                        <option value="Республика Карелия">Республика Карелия</option>
+                        <option value="Республика Коми">Республика Коми</option>
+                        <option value="Республика Крым">Республика Крым</option>
+                        <option value="Республика Марий Эл">Республика Марий Эл</option>
+                        <option value="Республика Мордовия">Республика Мордовия</option>
+                        <option value="Республика Саха (Якутия)">Республика Саха (Якутия)</option>
+                        <option value="Республика Северная Осетия — Алания">Республика Северная Осетия — Алания</option>
+                        <option value="Республика Татарстан">Республика Татарстан</option>
+                        <option value="Республика Тыва">Республика Тыва</option>
+                        <option value="Республика Хакасия">Республика Хакасия</option>
+                        <option value="Ростовская область">Ростовская область</option>
+                        <option value="Рязанская область">Рязанская область</option>
+                        <option value="Самарская область">Самарская область</option>
+                        <option value="Саратовская область">Саратовская область</option>
+                        <option value="Сахалинская область">Сахалинская область</option>
+                        <option value="Свердловская область">Свердловская область</option>
+                        <option value="Севастополь">Севастополь</option>
+                        <option value="Смоленская область">Смоленская область</option>
+                        <option value="Ставропольский край">Ставропольский край</option>
+                        <option value="Тамбовская область">Тамбовская область</option>
+                        <option value="Тверская область">Тверская область</option>
+                        <option value="Томская область">Томская область</option>
+                        <option value="Тульская область">Тульская область</option>
+                        <option value="Тюменская область">Тюменская область</option>
+                        <option value="Удмуртская Республика">Удмуртская Республика</option>
+                        <option value="Ульяновская область">Ульяновская область</option>
+                        <option value="Хабаровский край">Хабаровский край</option>
+                        <option value="Ханты-Мансийский автономный округ">Ханты-Мансийский автономный округ</option>
+                        <option value="Челябинская область">Челябинская область</option>
+                        <option value="Чеченская Республика">Чеченская Республика</option>
+                        <option value="Чувашская Республика">Чувашская Республика</option>
+                        <option value="Чукотский автономный округ">Чукотский автономный округ</option>
+                        <option value="Ямало-Ненецкий автономный округ">Ямало-Ненецкий автономный округ</option>
+                        <option value="Ярославская область">Ярославская область</option>
+            </select>
+          </div>
+          <div class="form-group half-width">
+            <label class="form-label" for="city">Город</label>
+            <select id="city" name="city" class="form-input" required>
+              <option value="{{ city }}" selected>{{ city }}</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Скрытые координаты -->
+        <input type="hidden" id="birth_latitude" name="birth_latitude" value="{{ user.birth_latitude or '' }}">
+        <input type="hidden" id="birth_longitude" name="birth_longitude" value="{{ user.birth_longitude or '' }}">
+
+        <!-- Кнопка сохранения -->
+        <div class="form-row mt-20">
+  <button type="submit" class="register-button">Сохранить изменения</button>
+</div>
+
+
+        <!-- Кнопка выхода -->
+        <div class="logout-container">
+          <button type="button" class="logout-as-text" id="logoutBtn">Выйти из системы</button>
+        </div>
+      </form>
+    </main>
+
+    <!-- Нижняя навигация -->
+    <nav class="navigation" role="navigation" aria-label="Основное меню сайта">
+        <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}">
+          <i class="fas fa-home"></i><span>Главная</span>
+        </a>
+        <a href="{{ url_for('forecast') }}" class="nav-link {% if request.path == url_for('forecast') %}active{% endif %}">
+          <i class="fas fa-chart-line"></i><span>Прогноз</span>
+        </a>
+        <a href="{{ url_for('astrologer') }}" class="nav-link {% if request.path == url_for('astrologer') %}active{% endif %}">
+          <i class="fas fa-user-astronaut"></i><span>Астролог</span>
+        </a>
+        <a href="{{ url_for('handbook') }}" class="nav-link {% if request.path == url_for('handbook') %}active{% endif %}">
+          <i class="fas fa-book"></i><span>Справочник</span>
+        </a>
+        <a href="{{ url_for('settings') }}" class="nav-link {% if request.path == url_for('settings') %}active{% endif %}">
+          <i class="fas fa-cog"></i><span>Настройки</span>
+        </a>
+    </nav>
+  </div>
+
+  <!-- Скрипт выхода из системы -->
+  <script>
+    document.getElementById('logoutBtn').addEventListener('click', function () {
+      window.location.href = '/logout';
+    });
+  </script>
+
+  <!-- Внешний JS для обработки формы -->
+  <script src="{{ url_for('static', filename='register.js') }}"></script>
+</body>
+</html>

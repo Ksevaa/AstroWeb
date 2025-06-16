@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Главная | Астрологический календарь</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars small"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">Астрологический календарь</h1>
+            <div class="welcome-message">
+                Здравствуйте, <span class="username">{{ user.name }}</span>!
+            </div>
+
+            <!-- Блок с астрологическими символами: Солнце, Луна, Асцендент -->
+            <div class="astrology-symbols">
+                <div class="symbol-group">
+                    <i class="symbol fas fa-sun"></i>
+                    <span class="symbol-label">Солнце: {{ sun_sign }}</span>
+                </div>
+                <div class="symbol-group">
+                    <i class="symbol fas fa-moon"></i>
+                    <span class="symbol-label">Луна: {{ moon_sign }}</span>
+                </div>
+                <div class="symbol-group">
+                    <i class="symbol fas fa-arrow-up"></i>
+                    <span class="symbol-label">Восход: {{ ascendant_sign }}</span>
+                </div>
+                <!-- Кнопка для открытия модального окна с пояснениями -->
+                <button class="info-bbtn" id="zodiacInfoBtn">?</button>
+            </div>
+        </header>
+
+        <!-- Основное содержимое страницы -->
+        <main class="main-content">
+            <!-- Блок с текущей датой и астрологическими событиями -->
+            <div class="events-header">
+                <div class="date-box">
+                    <!-- Здесь через JS подставляются текущие день недели, дата и год -->
+                    <div class="day-week" id="dayWeek"></div>
+                    <div class="current-date" id="currentDate"></div>
+                    <div class="year" id="year"></div>
+                </div>
+                <div class="events-box">
+                    <h3>Астрологические события на сегодня</h3>
+                    <!-- Вывод списка событий с сервера, если они есть -->
+                    {% if daily_events %}
+                        <ul>
+                            {% for event in daily_events %}
+                                <li>
+                                    {{ event.planet1 }} — {{ event.aspect }} — {{ event.planet2 }}:
+                                    {{ event.description }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <!-- Сообщение, если событий на сегодня нет -->
+                        <p>На сегодня нет значимых астрологических событий.</p>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Блок с интерпретациями событий (слайды) -->
+            <div class="interpretation-container">
+                <div class="interpretation-slides">
+                    <!-- Если есть события, создаём слайды для каждого -->
+                    {% if daily_events %}
+                        {% for event in daily_events %}
+                            <div class="interpretation-slide {% if loop.first %}active{% endif %}">
+                                <h3>Описание астрологических событий</h3>
+                                <p><strong>{{ event.planet1 }} — {{ event.aspect }} — {{ event.planet2 }}</strong></p>
+                                <p>{{ event.description }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <!-- Если событий нет, выводим один слайд с сообщением -->
+                        <div class="interpretation-slide active">
+                            <h3>Описание астрологических событий</h3>
+                            <p>На сегодня нет значимых событий для интерпретации.</p>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <!-- Элементы управления слайдами: стрелки и точки -->
+                <div class="interpretation-controls">
+                    <button class="interpretation-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="interpretation-dots">
+                        <!-- Создание точек для каждого слайда -->
+                        {% if daily_events %}
+                            {% for _ in daily_events %}
+                                <span class="dot {% if loop.first %}active{% endif %}"></span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="dot active"></span>
+                        {% endif %}
+                    </div>
+                    <button class="interpretation-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- Навигация по сайту -->
+        <nav class="navigation" role="navigation" aria-label="Основное меню сайта">
+
+            <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}">
+                <i class="fas fa-home"></i><span>Главная</span>
+            </a>
+            <a href="{{ url_for('forecast') }}" class="nav-link {% if request.path == url_for('forecast') %}active{% endif %}">
+                <i class="fas fa-chart-line"></i><span>Прогноз</span>
+            </a>
+            <a href="{{ url_for('astrologer') }}" class="nav-link {% if request.path == url_for('astrologer') %}active{% endif %}">
+                <i class="fas fa-user-astronaut"></i><span>Астролог</span>
+            </a>
+            <a href="{{ url_for('handbook') }}" class="nav-link {% if request.path == url_for('handbook') %}active{% endif %}">
+                <i class="fas fa-book"></i><span>Справочник</span>
+            </a>
+            <a href="{{ url_for('settings') }}" class="nav-link {% if request.path == url_for('settings') %}active{% endif %}">
+                <i class="fas fa-cog"></i><span>Настройки</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Модальное окно с пояснениями по знакам -->
+    <div class="modal" id="zodiacInfoModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h3>Ваши астрологические знаки</h3>
+            <p>Эти символы показывают ваши ключевые астрологические показатели:</p>
+            <ul>
+                <li><strong>Солнечный знак</strong> - определяется положением Солнца в момент вашего рождения, влияет на основу личности</li>
+                <li><strong>Лунный знак</strong> - положение Луны, отвечает за эмоции и подсознание</li>
+                <li><strong>Восходящий знак</strong> (Асцендент) - знак, восходящий на восточном горизонте в момент рождения, определяет внешнее проявление</li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

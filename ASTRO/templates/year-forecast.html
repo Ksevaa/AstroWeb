@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогноз на год | Астрологический календарь</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars small"></div>
+    
+    <div class="forecast-container">
+        <!-- Боковое меню -->
+        <aside class="forecast-menu" role="navigation" aria-label="Выбор типа прогноза">
+            <h3>Выберите прогноз</h3>
+            <ul>
+                <li class="{% if request.path == '/forecast' %}active{% endif %}">
+                    <a href="{{ url_for('forecast') }}">
+                        <i class="fas fa-calendar-day"></i> На день
+                    </a>
+                </li>
+                <li class="{% if request.path == '/week-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('week_forecast') }}">
+                        <i class="fas fa-calendar-week"></i> На неделю
+                    </a>
+                </li>
+                <li class="{% if request.path == '/month-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('month_forecast') }}">
+                        <i class="fas fa-calendar-alt"></i> На месяц
+                    </a>
+                </li>
+                <li class="{% if request.path == '/year-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('year_forecast') }}">
+                        <i class="fas fa-star"></i> На год
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Основное содержимое -->
+        <main class="forecast-content">
+            
+            <!-- Заголовок -->
+            <div class="selected-date">
+                <h2>Прогноз на <span class="currentYear"></span> год</h2>
+            </div>
+
+            <!-- Выбор года -->
+            <div class="year-selection">
+                <button id="prevYearBtn"><i class="fas fa-chevron-left"></i></button>
+                <h2 class="currentYear">2025</h2>
+                <button id="nextYearBtn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+            
+            <!-- Основной прогноз -->
+            <div class="year-forecast">
+                <div class="zodiac-overview">
+                    <div class="zodiac-card main-zodiac">
+                        <i></i>
+                        <h3></h3>
+                        <p id="mainEvent"></p>
+                    </div>
+                </div>
+                
+                <!-- Ключевые астрологические события -->
+                <div class="year-events">
+                    <h3>Ключевые астрологические события</h3>
+                    <ul id="yearEventsList"></ul>
+                </div>
+
+                <!-- Категории прогноза -->
+                <div class="interpretation-categories">
+                    <button class="active">Общий прогноз</button>
+                    <button>Любовь</button>
+                    <button>Карьера</button>
+                    <button>Финансы</button>
+                    <button>Здоровье</button>
+                </div>
+
+                <!-- Интерпретация -->
+                <div class="month-interpretation">
+                    <div class="month-summary">
+                        <h3>Астрологический обзор года</h3>
+                        <div class="zodiac-progress">
+                            <div class="zodiac-sign">
+                                <i class="fas fa-sun"></i>
+                                <span>Солнце: <span id="sunSign">переходит в 5 дом гороскопа</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="interpretation-content">
+                        <h3>Общий прогноз на <span id="interpretationYear">2025</span> год</h3>
+                        <p id="generalForecast">
+                            2025 год начнется под влиянием ретроградного Марса, что может внести некоторую напряженность в глобальные процессы...
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Навигация -->
+        <nav class="navigation" role="navigation" aria-label="Основное меню сайта">
+            <a href="{{ url_for('index') }}" class="nav-link {% if 'index' in request.path %}active{% endif %}">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="{{ url_for('forecast') }}" class="nav-link {% if 'forecast' in request.path %}active{% endif %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогноз</span>
+            </a>
+            <a href="{{ url_for('astrologer') }}" class="nav-link {% if request.path == '/astrologer' %}active{% endif %}">
+                <i class="fas fa-user-astronaut"></i>
+                <span>Астролог</span>
+            </a>
+            <a href="{{ url_for('handbook') }}" class="nav-link {% if 'handbook' in request.path %}active{% endif %}">
+                <i class="fas fa-book"></i>
+                <span>Справочник</span>
+            </a>
+            <a href="{{ url_for('settings') }}" class="nav-link {% if 'settings' in request.path %}active{% endif %}">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
+        </main>
+    </div>
+    <script src="/static/year-forecast.js"></script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Прогноз | Астрологический календарь</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars small"></div>
+
+    <div class="forecast-container">
+        <!-- Боковое меню -->
+        <aside class="forecast-menu" role="navigation" aria-label="Выбор типа прогноза">
+            <h3>Выберите прогноз</h3>
+            <ul>
+                <li class="{% if request.path == '/forecast' %}active{% endif %}">
+                    <a href="{{ url_for('forecast') }}">
+                        <i class="fas fa-calendar-day"></i> На день
+                    </a>
+                </li>
+                <li class="{% if request.path == '/week-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('week_forecast') }}">
+                        <i class="fas fa-calendar-week"></i> На неделю
+                    </a>
+                </li>
+                <li class="{% if request.path == '/month-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('month_forecast') }}">
+                        <i class="fas fa-calendar-alt"></i> На месяц
+                    </a>
+                </li>
+                <li class="{% if request.path == '/year-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('year_forecast') }}">
+                        <i class="fas fa-star"></i> На год
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Основное содержимое -->
+        <main class="forecast-content">
+            <!-- Заголовок с выбранной датой -->
+            <section class="selected-date" aria-live="polite">
+                <h2>Прогноз на <span id="currentSelectedDate"></span></h2>
+            </section>
+
+            <!-- Календарь -->
+            <section class="calendar-container" aria-label="Календарь для выбора даты прогноза">
+                <div class="calendar-header">
+                    <button id="prevYear" aria-label="Предыдущий год"><i class="fas fa-angle-double-left"></i></button>
+                    <button id="prevMonth" aria-label="Предыдущий месяц"><i class="fas fa-angle-left"></i></button>
+                    <h3 id="currentMonthYear" aria-live="polite"></h3>
+                    <button id="nextMonth" aria-label="Следующий месяц"><i class="fas fa-angle-right"></i></button>
+                    <button id="nextYear" aria-label="Следующий год"><i class="fas fa-angle-double-right"></i></button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid" role="grid" aria-label="Дни месяца">
+                    <!-- Генерация календаря через JS -->
+                </div>
+            </section>
+
+            <!-- Интерпретация прогноза -->
+            <section class="forecast-interpretation" aria-live="polite">
+                <nav class="interpretation-categories" role="tablist" aria-label="Категории прогноза">
+                    <button class="active" role="tab" aria-selected="true">Общий прогноз</button>
+                    <button role="tab" aria-selected="false">Любовь</button>
+                    <button role="tab" aria-selected="false">Карьера</button>
+                    <button role="tab" aria-selected="false">Финансы</button>
+                    <button role="tab" aria-selected="false">Здоровье</button>
+                </nav>
+                <article class="interpretation-content" role="tabpanel">
+                    <h3 id="forecastTitle"></h3>
+                    <p id="forecastText">Загрузка прогноза...</p>
+                </article>
+            </section>
+        </main>
+
+        <!-- Навигация по сайту -->
+        <nav class="navigation" role="navigation" aria-label="Основное меню сайта">
+        <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}">
+            <i class="fas fa-home"></i><span>Главная</span>
+        </a>
+        <a href="{{ url_for('forecast') }}" class="nav-link {% if request.path == url_for('forecast') %}active{% endif %}">
+            <i class="fas fa-chart-line"></i><span>Прогноз</span>
+        </a>
+        <a href="{{ url_for('astrologer') }}" class="nav-link {% if request.path == url_for('astrologer') %}active{% endif %}">
+            <i class="fas fa-user-astronaut"></i><span>Астролог</span>
+        </a>
+        <a href="{{ url_for('handbook') }}" class="nav-link {% if request.path == url_for('handbook') %}active{% endif %}">
+            <i class="fas fa-book"></i><span>Справочник</span>
+        </a>
+        <a href="{{ url_for('settings') }}" class="nav-link {% if request.path == url_for('settings') %}active{% endif %}">
+            <i class="fas fa-cog"></i><span>Настройки</span>
+        </a>
+    </nav>
+    </div>
+    <script src="{{ url_for('static', filename='forecast.js') }}"></script>
+</body>
+</html>

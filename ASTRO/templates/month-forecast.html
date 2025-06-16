@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Прогноз на месяц | Астрологический календарь</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars small"></div>
+    <div class="forecast-container">
+        <!-- Боковое меню -->
+        <aside class="forecast-menu" role="navigation" aria-label="Выбор типа прогноза">
+            <h3>Выберите прогноз</h3>
+            <ul>
+                <li class="{% if request.path == '/forecast' %}active{% endif %}">
+                    <a href="{{ url_for('forecast') }}">
+                        <i class="fas fa-calendar-day"></i> На день
+                    </a>
+                </li>
+                <li class="{% if request.path == '/week-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('week_forecast') }}">
+                        <i class="fas fa-calendar-week"></i> На неделю
+                    </a>
+                </li>
+                <li class="{% if request.path == '/month-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('month_forecast') }}">
+                        <i class="fas fa-calendar-alt"></i> На месяц
+                    </a>
+                </li>
+                <li class="{% if request.path == '/year-forecast' %}active{% endif %}">
+                    <a href="{{ url_for('year_forecast') }}">
+                        <i class="fas fa-star"></i> На год
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- Основное содержимое -->
+        <main class="forecast-content">
+            <div class="selected-date">
+                <h2>Прогноз на <span id="currentMonthYear"></span></h2>
+            </div>
+
+            <!-- Выбор месяца и года -->
+            <div class="month-selector">
+                <div class="form-group">
+                    <label for="monthSelect">Месяц</label>
+                    <select id="monthSelect" class="form-input">
+                        <option value="0">Январь</option>
+                        <option value="1">Февраль</option>
+                        <option value="2">Март</option>
+                        <option value="3">Апрель</option>
+                        <option value="4">Май</option>
+                        <option value="5">Июнь</option>
+                        <option value="6">Июль</option>
+                        <option value="7">Август</option>
+                        <option value="8">Сентябрь</option>
+                        <option value="9">Октябрь</option>
+                        <option value="10">Ноябрь</option>
+                        <option value="11">Декабрь</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="yearSelect">Год</label>
+                    <select id="yearSelect" class="form-input">
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
+                        <option value="2026">2026</option>
+                        <option value="2027">2027</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Категории прогноза -->
+            <div class="interpretation-categories">
+                <button class="active">Общий прогноз</button>
+                <button data-category="love">Любовь</button>
+                <button data-category="career">Карьера</button>
+                <button data-category="finance">Финансы</button>
+                <button data-category="health">Здоровье</button>
+            </div>
+
+            <!-- Обзор месяца -->
+            <div class="month-interpretation">
+                <div class="month-summary">
+                    <h3>Астрологический обзор месяца</h3>
+                    <div class="zodiac-progress">
+                        <div class="zodiac-sign">
+                            <i class="fas fa-sun"></i>
+                            <span>Солнце: <span id="sunSign">Рак</span></span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div class="month-events">
+                        <h4>Ключевые события:</h4>
+                        <ul>
+  <li>Марс в 5 доме.</li>
+  <li>Ретроградный Меркурий в Близнецах.</li>
+  <li>Лунное затмение в Раке.</li>
+  <li>Венера в тригоне с Юпитером.</li>
+</ul>
+
+
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="interpretation-content">
+                    <h3 id="generalForecastTitle"><span id="forecastMonthYearText"></span></h3>
+                    <div id="forecastTextBlock"></div>
+                </div>
+
+            </div>
+
+            <!-- Навигация -->
+        <nav class="navigation" role="navigation" aria-label="Основное меню сайта">
+            <a href="{{ url_for('index') }}" class="nav-link {% if 'index' in request.path %}active{% endif %}">
+                <i class="fas fa-home"></i>
+                <span>Главная</span>
+            </a>
+            <a href="{{ url_for('forecast') }}" class="nav-link {% if 'forecast' in request.path %}active{% endif %}">
+                <i class="fas fa-chart-line"></i>
+                <span>Прогноз</span>
+            </a>
+            <a href="{{ url_for('astrologer') }}" class="nav-link {% if request.path == '/astrologer' %}active{% endif %}">
+                <i class="fas fa-user-astronaut"></i>
+                <span>Астролог</span>
+            </a>
+            <a href="{{ url_for('handbook') }}" class="nav-link {% if 'handbook' in request.path %}active{% endif %}">
+                <i class="fas fa-book"></i>
+                <span>Справочник</span>
+            </a>
+            <a href="{{ url_for('settings') }}" class="nav-link {% if 'settings' in request.path %}active{% endif %}">
+                <i class="fas fa-cog"></i>
+                <span>Настройки</span>
+            </a>
+        </nav>
+        </main>
+    </div>
+    <script src="/static/month-forecast.js"></script>
+</body>
+</html>

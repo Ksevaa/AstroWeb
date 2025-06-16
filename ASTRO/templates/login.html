@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Астрологический календарь - Вход</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars small"></div>
+
+    <div class="login-header">
+        <h1 class="login-title">Астрологический календарь</h1>
+    </div>
+
+    <div class="login-container">
+        <h2 class="login-subtitle">Вход</h2>
+
+        {% if error %}
+            <div class="error-message">{{ error }}</div>
+        {% endif %}
+
+        <form method="post" action="{{ url_for('login') }}">
+            <div class="form-group">
+                <label for="email" class="form-label">Электронная почта</label>
+                <input type="email" name="email" id="email" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Пароль</label>
+                <input type="password" name="password" id="password" class="form-input" required>
+            </div>
+
+            <button type="submit" class="login-button">Войти</button>
+
+            <div class="helper-links">
+                <a href="#" class="helper-link" id="forgotPasswordLink">Забыли пароль?</a>
+                <a href="{{ url_for('register') }}" class="helper-link">Создать аккаунт</a>
+            </div>
+        </form>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

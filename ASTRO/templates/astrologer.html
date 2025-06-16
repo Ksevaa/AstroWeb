@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Астролог | Астрологический календарь</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <script>
+        const CHAT_ID = {{ chat_id | tojson }};
+    </script>
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars small"></div>
+
+    <div class="astrologer-container">
+        <!-- Шапка -->
+        <header class="astrologer-header">
+            <h1 class="astrologer-title">Чат с астрологом</h1>
+            <button class="help-btn" id="astrologerHelpBtn" aria-label="Помощь по чату с астрологом">?</button>
+        </header>
+
+        <!-- Контейнер чата -->
+        <section class="chat-container" id="chatContainer" aria-live="polite" aria-label="Чат с астрологом">
+            <!-- Пример сообщений -->
+            <div class="message-date" aria-label="Дата сообщений">30 мая 2025</div>
+
+            <article class="message astrologer-message" role="log" aria-live="polite" aria-atomic="true">
+                <p>Здравствуйте! Я ваш персональный астролог. Чем могу помочь?</p>
+                <time class="message-time" datetime="2023-05-12T12:30">12:30</time>
+            </article>
+
+                        <div class="message-date" aria-label="Дата сообщений">1 июня 2025</div>
+
+            <article class="message user-message" role="log" aria-live="polite" aria-atomic="true">
+                <p>Здравствуйте! Хотела бы узнать, как сложится моя финансовая ситуация в этом месяце?</p>
+                <time class="message-time" datetime="2023-05-12T12:35">12:35</time>
+            </article>
+
+            <div class="message-date" aria-label="Дата сообщений">Сегодня</div>
+
+            <article class="message astrologer-message" role="log" aria-live="polite" aria-atomic="true">
+                <p>Спасибо за ваш вопрос! В ближайшее время я внимательно его изучу и обязательно дам вам подробный ответ.</p>
+                <time class="message-time" datetime="2023-05-16T10:15">10:15</time>
+            </article>
+        </section>
+
+        <!-- Поле ввода сообщения -->
+        <form class="message-input-container" aria-label="Отправить сообщение астрологу" onsubmit="event.preventDefault(); sendMessage();">
+            <input
+                type="text"
+                class="message-input"
+                placeholder="Напишите ваш вопрос астрологу..."
+                aria-label="Поле ввода сообщения"
+                required
+                autocomplete="off"
+                />
+            <button type="submit" class="send-btn" aria-label="Отправить сообщение">
+                <i class="fas fa-arrow-up"></i>
+            </button>
+        </form>
+        <!-- Навигация по сайту -->
+        <nav class="navigation" role="navigation" aria-label="Основное меню сайта">
+            <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}">
+                <i class="fas fa-home"></i><span>Главная</span>
+            </a>
+            <a href="{{ url_for('forecast') }}" class="nav-link {% if request.path == url_for('forecast') %}active{% endif %}">
+                <i class="fas fa-chart-line"></i><span>Прогноз</span>
+            </a>
+            <a href="{{ url_for('astrologer') }}" class="nav-link {% if request.path == url_for('astrologer') %}active{% endif %}">
+                <i class="fas fa-user-astronaut"></i><span>Астролог</span>
+            </a>
+            <a href="{{ url_for('handbook') }}" class="nav-link {% if request.path == url_for('handbook') %}active{% endif %}">
+                <i class="fas fa-book"></i><span>Справочник</span>
+            </a>
+            <a href="{{ url_for('settings') }}" class="nav-link {% if request.path == url_for('settings') %}active{% endif %}">
+                <i class="fas fa-cog"></i><span>Настройки</span>
+            </a>
+        </nav>
+    </div>
+
+    <!-- Модальное окно помощи -->
+    <div class="help-modal" id="astrologerHelpModal" role="dialog" aria-modal="true" aria-labelledby="helpModalTitle" aria-describedby="helpModalDesc" tabindex="-1" style="display:none;">
+        <div class="help-modal-content">
+            <button class="close-help-modal" aria-label="Закрыть окно помощи">&times;</button>
+            <h3 id="helpModalTitle">Как задать вопрос астрологу</h3>
+            <div id="helpModalDesc">
+                <p>Чтобы получить наиболее точный ответ, следуйте этим рекомендациям:</p>
+                <ul>
+                    <li>Формулируйте вопрос конкретно и четко</li>
+                    <li>Укажите интересующий вас период времени</li>
+                    <li>Если вопрос касается конкретной сферы жизни, укажите ее</li>
+                    <li>Астролог ответит вам в течение 24 часов</li>
+                </ul>
+                <p>Пример хорошего вопроса: "Как сложится моя карьера в период с июня по сентябрь 2023 года?"</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='astrologer.js') }}"></script>
+</body>
+</html>

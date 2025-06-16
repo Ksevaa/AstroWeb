@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Справочник | Астрологический календарь</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars small"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1 class="main-title">Астрологический справочник</h1>
+            <p class="welcome-message">Познакомьтесь с основами астрологии</p>
+        </header>
+
+        <main class="main-content">
+            <section class="handbook-section">
+                <h2>Знаки Зодиака</h2>
+                <ul>
+                    <li><strong>Овен:</strong> инициативный, страстный, прямолинейный</li>
+                    <li><strong>Телец:</strong> стабильный, терпеливый, чувственный</li>
+                    <li><strong>Близнецы:</strong> подвижный, общительный, умный</li>
+                    <li><strong>Рак:</strong> чувствительный, заботливый, интуитивный</li>
+                    <li><strong>Лев:</strong> харизматичный, щедрый, амбициозный</li>
+                    <li><strong>Дева:</strong> аналитичный, скромный, практичный</li>
+                    <li><strong>Весы:</strong> дипломатичный, уравновешенный, эстет</li>
+                    <li><strong>Скорпион:</strong> глубокий, решительный, интуитивный</li>
+                    <li><strong>Стрелец:</strong> оптимистичный, свободолюбивый, философ</li>
+                    <li><strong>Козерог:</strong> целеустремлённый, организованный, реалист</li>
+                    <li><strong>Водолей:</strong> независимый, новатор, гуманист</li>
+                    <li><strong>Рыбы:</strong> мечтательный, эмпатичный, мистик</li>
+                </ul>
+            </section>
+
+            <section class="handbook-section">
+                <h2>Планеты</h2>
+                <ul>
+                    <li><strong>Солнце:</strong> воля, эго, личность</li>
+                    <li><strong>Луна:</strong> эмоции, душа, подсознание</li>
+                    <li><strong>Меркурий:</strong> мышление, общение, логика</li>
+                    <li><strong>Венера:</strong> любовь, гармония, эстетика</li>
+                    <li><strong>Марс:</strong> энергия, действие, агрессия</li>
+                    <li><strong>Юпитер:</strong> рост, удача, философия</li>
+                    <li><strong>Сатурн:</strong> дисциплина, границы, карма</li>
+                    <li><strong>Уран:</strong> перемены, революции, интуиция</li>
+                    <li><strong>Нептун:</strong> вдохновение, иллюзии, мистика</li>
+                    <li><strong>Плутон:</strong> трансформация, власть, глубины</li>
+                </ul>
+            </section>
+
+            <section class="handbook-section">
+                <h2>Дома</h2>
+                <ul>
+                    <li><strong>1 дом —</strong> личность, внешность, впечатление</li>
+                    <li><strong>2 дом —</strong> финансы, ресурсы, ценности</li>
+                    <li><strong>3 дом —</strong> мышление, братья и сёстры, окружение</li>
+                    <li><strong>4 дом —</strong> семья, корни, дом</li>
+                    <li><strong>5 дом —</strong> творчество, дети, романтика</li>
+                    <li><strong>6 дом —</strong> работа, здоровье, рутина</li>
+                    <li><strong>7 дом —</strong> партнёрство, брак, контракты</li>
+                    <li><strong>8 дом —</strong> трансформация, наследие, табу</li>
+                    <li><strong>9 дом —</strong> путешествия, философия, высшее образование</li>
+                    <li><strong>10 дом —</strong> карьера, достижения, статус</li>
+                    <li><strong>11 дом —</strong> друзья, коллектив, будущее</li>
+                    <li><strong>12 дом —</strong> тайны, подсознание, уединение</li>
+                </ul>
+            </section>
+
+
+            <section class="handbook-section">
+                <h2>Аспекты</h2>
+                <ul>
+                    <li><strong>Соединение (0°):</strong> слияние энергий</li>
+                    <li><strong>Оппозиция (180°):</strong> напряжение, вызов</li>
+                    <li><strong>Квадрат (90°):</strong> конфликт, мотивация к действию</li>
+                    <li><strong>Трин (120°):</strong> гармония, поток</li>
+                    <li><strong>Секстиль (60°):</strong> возможность, поддержка</li>
+                </ul>
+            </section>
+        </main>
+
+        <!-- Навигация по сайту -->
+        <nav class="navigation" role="navigation" aria-label="Основное меню сайта">
+    <a href="{{ url_for('index') }}" class="nav-link {% if request.path == url_for('index') %}active{% endif %}">
+        <i class="fas fa-home"></i><span>Главная</span>
+    </a>
+    <a href="{{ url_for('forecast') }}" class="nav-link {% if request.path == url_for('forecast') %}active{% endif %}">
+        <i class="fas fa-chart-line"></i><span>Прогноз</span>
+    </a>
+    <a href="{{ url_for('astrologer') }}" class="nav-link {% if request.path == url_for('astrologer') %}active{% endif %}">
+        <i class="fas fa-user-astronaut"></i><span>Астролог</span>
+    </a>
+    <a href="{{ url_for('handbook') }}" class="nav-link {% if request.path == url_for('handbook') %}active{% endif %}">
+        <i class="fas fa-book"></i><span>Справочник</span>
+    </a>
+    <a href="{{ url_for('settings') }}" class="nav-link {% if request.path == url_for('settings') %}active{% endif %}">
+        <i class="fas fa-cog"></i><span>Настройки</span>
+    </a>
+</nav>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

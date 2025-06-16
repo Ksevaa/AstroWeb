@@ -1,0 +1,129 @@
+const API_KEY = '2021542f-8e14-40cb-9ac2-a555348e2ff1'; 
+const regionSelect = document.getElementById('region');
+const citySelect = document.getElementById('city');
+
+// Функция для геокодинга региона и получения городов (ВОЗМОЖНО НАДО УДАЛИТЬ)
+async function fetchCitiesForRegion(regionName) {
+    const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${API_KEY}&format=json&geocode=${encodeURIComponent(regionName)}&results=100`;
+
+    const response = await fetch(url);
+    const data = await response.json();
+
+    // Проверяем, что нашлись объекты
+    const geoObjects = data.response.GeoObjectCollection.featureMember;
+
+    const cities = new Set();
+
+    geoObjects.forEach(item => {
+        const geoObj = item.GeoObject;
+        const description = geoObj.metaDataProperty.GeocoderMetaData.text;
+        const name = geoObj.name;
+
+        // Простейший фильтр, чтобы не добавлять странные объекты
+        if (description.includes(regionName) && name !== regionName) {
+            cities.add(name);
+        }
+    });
+
+    return Array.from(cities).sort();
+}
+
+const citiesByRegion = {
+  "Московская область": [
+    "Москва", "Химки", "Мытищи", "Королёв", "Подольск", "Люберцы", "Одинцово", "Сергиев Посад", "Долгопрудный", "Железнодорожный"
+  ],
+  "Ленинградская область": [
+    "Санкт-Петербург", "Гатчина", "Выборг", "Тосно", "Кингисепп", "Кировск", "Сосновый Бор", "Сертолово", "Всеволожск", "Луга"
+  ],
+  "Пермский край": [
+    "Пермь", "Березники", "Верещагино", "Соликамск", "Чайковский", "Краснокамск", "Кунгур", "Лысьва", "Добрянка", "Нытва", "Оса"
+  ],
+  "Новосибирская область": [
+    "Новосибирск", "Бердск", "Искитим", "Обь", "Куйбышев", "Кольцово", "Чик", "Барабинск", "Тогучин", "Коченёво"
+  ],
+  "Краснодарский край": [
+    "Краснодар", "Сочи", "Новороссийск", "Армавир", "Туапсе", "Геленджик", "Анапа", "Славянск-на-Кубани", "Кропоткин", "Темрюк"
+  ],
+  "Свердловская область": [
+    "Екатеринбург", "Нижний Тагил", "Каменск-Уральский", "Полевской", "Первоуральск", "Серов", "Ревда", "Асбест", "Берёзовский", "Ивдель"
+  ],
+  "Республика Татарстан": [
+    "Казань", "Набережные Челны", "Альметьевск", "Нижнекамск", "Зеленодольск", "Бугульма", "Елабуга", "Лениногорск", "Чистополь", "Азнакаево"
+  ],
+  "Челябинская область": [
+    "Челябинск", "Магнитогорск", "Златоуст", "Копейск", "Миасс", "Сатка", "Троицк", "Кыштым", "Южноуральск", "Снежинск"
+  ],
+  "Ростовская область": [
+    "Ростов-на-Дону", "Таганрог", "Шахты", "Волгодонск", "Азов", "Новочеркасск", "Батайск", "Каменск-Шахтинский", "Донецк", "Миллерово"
+  ],
+  "Башкортостан": [
+    "Уфа", "Стерлитамак", "Салават", "Нефтекамск", "Октябрьский", "Ишимбай", "Белорецк", "Мелеуз", "Туймазы", "Бирск"
+  ],
+  "Волгоградская область": [
+    "Волгоград", "Волжский", "Камышин", "Михайловка", "Урюпинск", "Калач-на-Дону", "Фролово", "Котельниково", "Суровикино", "Жирновск"
+  ],
+  "Самарская область": [
+    "Самара", "Тольятти", "Сызрань", "Новокуйбышевск", "Жигулёвск", "Кинель", "Чапаевск", "Похвистнево", "Отрадный", "Нефтегорск"
+  ],
+  "Красноярский край": [
+    "Красноярск", "Ачинск", "Норильск", "Канск", "Минусинск", "Шарыпово", "Лесосибирск", "Железногорск", "Зеленогорск", "Дивногорск"
+  ],
+  "Иркутская область": [
+    "Иркутск", "Ангарск", "Братск", "Усть-Илимск", "Усолье-Сибирское", "Саянск", "Черемхово", "Тулун", "Свирск", "Бодайбо"
+  ],
+  "Хабаровский край": [
+    "Хабаровск", "Комсомольск-на-Амуре", "Советская Гавань", "Амурск", "Бикин", "Вяземский", "Николаевск-на-Амуре", "Охотск", "Чегдомын", "Солнечный"
+  ]
+};
+
+// Событие: когда пользователь выбирает регион
+regionSelect.addEventListener('change', function () {
+    const region = this.value;
+    citySelect.innerHTML = '';
+
+    if (!region || !citiesByRegion[region]) {
+        citySelect.disabled = true;
+        citySelect.innerHTML = '<option value="">Нет доступных городов</option>';
+        return;
+    }
+
+    const cities = citiesByRegion[region];
+
+    citySelect.disabled = false;
+    citySelect.innerHTML = '<option value="">Выберите город</option>';
+    cities.forEach(city => {
+        const option = document.createElement('option');
+        option.value = city;
+        option.textContent = city;
+        citySelect.appendChild(option);
+    });
+});
+
+citySelect.addEventListener('change', async function () {
+    const city = this.value;
+    const region = regionSelect.value;
+
+    if (!city || !region) return;
+
+    const query = `${region}, ${city}`;
+    const url = `https://geocode-maps.yandex.ru/1.x/?apikey=${API_KEY}&format=json&geocode=${encodeURIComponent(query)}`;
+
+    try {
+        const response = await fetch(url);
+        const data = await response.json();
+        const geoObject = data.response.GeoObjectCollection.featureMember[0]?.GeoObject;
+
+        if (geoObject) {
+            const coords = geoObject.Point.pos.split(' '); // [долгота, широта]
+            const longitude = coords[0];
+            const latitude = coords[1];
+            console.log('Координаты города:', latitude, longitude);
+
+            document.getElementById('latitude').value = latitude;
+            document.getElementById('longitude').value = longitude;
+        }
+    } catch (error) {
+        console.error('Ошибка при получении координат:', error);
+    }
+});
+
